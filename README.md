@@ -1,5 +1,5 @@
 # YT-video-AI
-<p># 🎬 YT Video AI – Frontend
+<p><h1># 🎬 YT Video AI – Frontend</h1>
 
 This is the frontend UI for the **YouTube Video AI Assistant**.  
 Users can paste a YouTube link, preview the video instantly, and ask questions about it.
@@ -27,4 +27,35 @@ Users can paste a YouTube link, preview the video instantly, and ask questions a
 ---
 
 Perfect for making an AI-powered video assistant that helps users understand any YouTube content easily.
+</p>
+
+
+<p><h1># 📡 YT Video AI – Backend</h1>
+
+This is the backend service for the **YouTube Video AI Assistant**.  
+It accepts a YouTube link + user question and generates an AI-powered answer using **Gemini Flash**.  
+
+### ✨ Key Features
+- 🔗 **Paste any YouTube link** and ask questions
+- 🤖 Works with **Gemini AI (gemini-flash-latest)**
+- 📝 **Transcript NOT required** — works even without captions  
+- 🧠 Automatically uses transcript *if available*  
+- 🧩 Falls back to metadata + AI reasoning when transcript is missing  
+- 🚀 Clean REST API for frontend integration  
+- 🔐 Uses `.env` for API keys  
+- 🎯 Built with Node.js + Express  
+
+### 🔧 Endpoints
+- `POST /ask` — Ask any question about the video
+
+### 📦 Tech Stack
+- Node.js  
+- Express  
+- Google Generative AI  
+- YouTube Transcript API  
+- CORS  
+
+---
+
+Backend is fully ready to be deployed and consumed by any frontend or mobile app.
 </p>
