@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>youtube AI</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #fcfcfc; }
+    input, textarea, button { width: 100%; padding: 10px; margin: 10px 0;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; }
+    button { cursor: pointer; }
+    .answer { background: #e1d8d8; padding: 15px; border-radius: 5px; margin-top: 20px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; }
+    iframe { width: 100%; height: 300px; margin-top: 5px; border: none; }
+  </style>
+</head>
+<body>
+
+  <div id="videoContainer"></div>
+  
+  <label for="videoLink"style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">YouTube Video Link:</label>
+  <input type="text" id="videoLink" placeholder="Paste YouTube link here" />
+
+  <label for="question"style ="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Your Question:</label>
+  <textarea id="question" placeholder="Ask something about the video..."></textarea>
+
+  <button id="askBtn">Ask AI</button>
+
+ 
+
+  <!-- AI answer -->
+  <div class="answer" id="answerContainer"></div>
+
+  <script>
+    const askBtn = document.getElementById("askBtn");
+    const videoLinkInput = document.getElementById("videoLink");
+    const questionInput = document.getElementById("question");
+    const answerContainer = document.getElementById("answerContainer");
+    const videoContainer = document.getElementById("videoContainer");
+
+    function extractVideoId(url) {
+      try {
+        const parsed = new URL(url);
+        if (parsed.hostname.includes("youtube.com")) return parsed.searchParams.get("v");
+        if (parsed.hostname.includes("youtu.be")) return parsed.pathname.substring(1);
+        return null;
+      } catch {
+        return null;
+      }
+    }
+
+    // Display video once link is pasted
+    videoLinkInput.addEventListener("input", () => {
+      const videoId = extractVideoId(videoLinkInput.value);
+      if (videoId) {
+        videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+      } else {
+        videoContainer.innerHTML = "";
+      }
+    });
+
+    askBtn.addEventListener("click", async () => {
+      const videoLink = videoLinkInput.value.trim();
+      const question = questionInput.value.trim();
+
+      if (!videoLink || !question) {
+        alert("Please enter both video link and question.");
+        return;
+      }
+
+      answerContainer.textContent = "Loading...";
+
+      try {
+        const res = await fetch("http://localhost:5000/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ videoLink, question })
+        });
+        const data = await res.json();
+        answerContainer.textContent = data.answer || "No answer returned.";
+      } catch (err) {
+        console.error(err);
+        answerContainer.textContent = "Something went wrong. Check backend.";
+      }
+    });
+  </script>
+
+</body>
+</html>
